@@ -15,7 +15,7 @@ pipeline {
         stash(name: 'war', includes: 'target/**')
       }
     }
-    stage('Unit') {
+    stage('') {
       parallel {
         stage('Backend') {
           steps {

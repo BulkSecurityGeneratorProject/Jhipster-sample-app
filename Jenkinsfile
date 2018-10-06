@@ -1,6 +1,17 @@
 pipeline {
   agent any
+  tools{
+  maven 'maven-3.9'
+  }
   stages {
+    stage("Initilize") {
+      steps {
+      sh '''
+      echo "PATH = ${PATH}"
+      echo "MAVEN_HOME = ${MAVEN_HOME}"
+      '''
+      }
+    }
     stage('Build') {
       steps {
         sh 'mvn -B -DskipTests clean package'

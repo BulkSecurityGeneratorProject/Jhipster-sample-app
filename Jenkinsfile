@@ -1,12 +1,9 @@
 pipeline {
   agent any
-  tools{
-  maven 'maven-3.9'
-  }
   stages {
-    stage("Initilize") {
+    stage('Initilize') {
       steps {
-      sh '''
+        sh '''
       echo "PATH = ${PATH}"
       echo "MAVEN_HOME = ${MAVEN_HOME}"
       '''
@@ -15,7 +12,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'mvn -B -DskipTests clean package'
-        stash name: 'war', includes: 'target/**'
+        stash(name: 'war', includes: 'target/**')
       }
     }
     stage('Unit') {
@@ -25,7 +22,7 @@ pipeline {
             sh 'echo Test'
           }
         }
-        stage('Perfromance Test') {
+        stage('Unit') {
           steps {
             sh 'echo perfomance test'
           }
@@ -47,5 +44,8 @@ pipeline {
         sh 'echo Deploy'
       }
     }
+  }
+  tools {
+    maven 'maven-3.9'
   }
 }

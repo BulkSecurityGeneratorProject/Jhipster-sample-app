@@ -3,7 +3,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'echo Build'
+        sh 'mvn -B -DskipTests clean package'
+        stash name: 'war', includes: 'target/**'
       }
     }
     stage('Unit') {

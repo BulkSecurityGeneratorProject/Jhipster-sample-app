@@ -15,20 +15,20 @@ pipeline {
         stash(name: 'war', includes: 'target/**')
       }
     }
-    stage('') {
-      parallel {
-        stage('Backend') {
-          steps {
-            sh 'echo Test'
-          }
-        }
-        stage('Unit') {
-          steps {
-            sh 'echo perfomance test'
-          }
+    stage('Backend') {
+        steps {
+          parallel(
+          'Unit' : {
+            unstash 'war'
+            sh mvn -B -DtestFailureIgnore test || exit 0'
+            junit '**/surefire-reports/**/*.xml'
+          },
+          'performance' : {
+           unstash 'war'
+          sh '# ./mvn -B gatling:execute'
+          })
         }
       }
-    }
     stage('Frontend') {
       steps {
         sh 'echo Frontend'

@@ -20,7 +20,7 @@ pipeline {
           parallel(
           'Unit' : {
             unstash 'war'
-            sh mvn -B -DtestFailureIgnore test || exit 0'
+            sh 'mvn -B -DtestFailureIgnore test || exit 0'
             junit '**/surefire-reports/**/*.xml'
           },
           'performance' : {

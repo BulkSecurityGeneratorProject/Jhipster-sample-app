@@ -31,7 +31,10 @@ pipeline {
       }
     stage('Frontend') {
       steps {
-        sh 'echo Frontend'
+        sh 'node --version'
+        sh '# yarn install'
+        sh '# yarn global add gulp-cli'
+        sh '# gulp test'
       }
     }
     stage('Static Analysis') {

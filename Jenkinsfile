@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'Slave-1'
+    }
+
+  }
   stages {
     stage('Initilize') {
       steps {
@@ -16,19 +21,22 @@ pipeline {
       }
     }
     stage('Backend') {
-        steps {
-          parallel(
-          'Unit' : {
+      parallel {
+        stage('Unit') {
+          steps {
             unstash 'war'
             sh 'mvn -B -DtestFailureIgnore test || exit 0'
             junit '**/surefire-reports/**/*.xml'
-          },
-          'performance' : {
-           unstash 'war'
-          sh '# ./mvn -B gatling:execute'
-          })
+          }
+        }
+        stage('performance') {
+          steps {
+            unstash 'war'
+            sh '# ./mvn -B gatling:execute'
+          }
         }
       }
+    }
     stage('Frontend') {
       steps {
         sh 'node --version'
